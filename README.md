@@ -44,3 +44,4 @@ jupyter notebook boston_housing.ipynb
 ### 参考
 
 [Cross Validation and Grid Search](https://stackoverflow.com/questions/19335165/cross-validation-and-grid-search)
+[Z table](https://s3.amazonaws.com/udacity-hosted-downloads/ZTable.jpg)
