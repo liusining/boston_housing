@@ -21,7 +21,9 @@
 
 在终端或命令行窗口中，选定`boston_housing/`的目录下（包含此README文件），运行下方的命令：
 
-```jupyter notebook boston_housing.ipynb```
+```
+jupyter notebook boston_housing.ipynb
+```
 
 这样就能够启动jupyter notebook软件，并在你的浏览器中打开文件。
 
@@ -38,3 +40,7 @@
 **目标变量**
 
 4. `MEDV`: 房屋的中值价格
+
+### 参考
+
+[Cross Validation and Grid Search](https://stackoverflow.com/questions/19335165/cross-validation-and-grid-search)
