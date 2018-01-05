@@ -45,3 +45,5 @@ jupyter notebook boston_housing.ipynb
 
 [Cross Validation and Grid Search](https://stackoverflow.com/questions/19335165/cross-validation-and-grid-search)
 [Z table](https://s3.amazonaws.com/udacity-hosted-downloads/ZTable.jpg)
+[关于Cross Validation（交叉验证）](https://discussions.youdaxue.com/t/cross-validation/2481)
+[不能更简单通俗的机器学习基础名词解释](https://zhuanlan.zhihu.com/p/25862224)
