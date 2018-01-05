@@ -11894,25 +11894,25 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[70]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1">#TODO 1</span>
 
 <span class="c1">#目标：计算价值的最小值</span>
-<span class="n">minimum_price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+<span class="n">minimum_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1">#目标：计算价值的最大值</span>
-<span class="n">maximum_price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="n">maximum_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1">#目标：计算价值的平均值</span>
-<span class="n">mean_price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">mean_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1">#目标：计算价值的中值</span>
-<span class="n">median_price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+<span class="n">median_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1">#目标：计算价值的标准差</span>
-<span class="n">std_price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="n">std_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">prices</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1">#目标：输出计算的结果</span>
 <span class="k">print</span> <span class="s2">&quot;Statistics for Boston housing dataset:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -13868,12 +13868,19 @@ RU5ErkJggg==
 <h3 id="&#38382;&#39064;-8---&#22238;&#31572;&#65306;">&#38382;&#39064; 8 - &#22238;&#31572;&#65306;<a class="anchor-link" href="#&#38382;&#39064;-8---&#22238;&#31572;&#65306;">&#182;</a></h3><ul>
 <li>什么是K折交叉验证法（k-fold cross-validation）？</li>
 </ul>
-<p>K折交叉验证法是一种选取训练集和测试集来训练并验证模型的方法。K 折的意思是，将数据集分成 K 份，然后进行 K 次训练：将 K 份数据集中的第一个的作为测试集，其余的作为训练集，训练并验证模型；然后使用 K 份中的第二个作为测试集，其余的作为训练集…… 依此类推。最后，计算 K 个训练所得模型的预测结果的平均值，作为最后的预测结果。</p>
+<p>K折交叉验证法是一种选取训练集和测试集来训练并验证模型的方法。K 折的意思是，将训练用的数据分成 K 份，然后进行 K 次训练：将 K 份数据子集中的第一个的作为测试集，其余的作为训练集，训练并验证模型；然后使用 K 份中的第二个作为测试集，其余的作为训练集…… 依此类推。最后，计算 K 个训练所得模型的预测结果的平均值，作为最后的预测结果。</p>
 <hr>
 <ul>
-<li><a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html">GridSearchCV</a>是如何结合交叉验证来完成对最佳参数组合的选择的？</li>
+<li>GridSearchCV是如何结合交叉验证来完成对最佳参数组合的选择的？</li>
 </ul>
-<p>接受参数组来编制 grid，接受算分方法来计算验证表现，验证</p>
+<ol>
+<li>在模型的各个参数的取值范围内，把参数的取值组合依次带入模型。</li>
+<li>然后用交叉验证法来分割训练数据，分割成训练集和验证集（validation set)。虽然训练数据已经是从原数据中分割而来的，但在这里，会让训练数据再分割一下，分成训练集和验证集。默认情况下这个切分是按数据的顺序切分的，不过在<code>KFold</code>中使用<code>shuffle=True</code>参数，可以乱序切分。</li>
+<li>在第一个参数组合下，用分割好的训练集来训练模型，然后用剩下的数据，也就是验证集(validation set)来验证模型。如果训练数据被分割成了 K 份，则训练 K 次，依次选取一个训练数据的子集作为验证集，其余的作为训练集。</li>
+<li>计算这个参数组合下，模型对验证集数据所做预测的平均分。</li>
+<li>对其余的参数组合，重复步骤 3 和 4，直至验证了所有的参数组合，并分别计算了训练所得模型对验证集数据所做预测的平均分。</li>
+<li>比较各个参数组合下，训练所得模型对验证集数据预测的平均分，选择平均分最高的那一组的参数组合作为最佳参数组合。</li>
+</ol>
 <hr>
 <ul>
 <li><a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html">GridSearchCV</a>中的<code>'cv_results_'</code>属性能告诉我们什么？</li>
@@ -13898,8 +13905,18 @@ RU5ErkJggg==
 <ul>
 <li>网格搜索时如果不使用交叉验证会有什么问题？交叉验证又是如何解决这个问题的？</li>
 </ul>
-<p>问题是：无法验证这组参数的表现</p>
-<p>交叉验证允许我们在数据集中选出测试集，能够让我们验证模型，评价模型的好坏。</p>
+<p><strong>问题：</strong></p>
+<p>如果不在网格搜索中使用交叉验证，我们对一个参数组合下训练得到的模型进行验证时就会面临尴尬：</p>
+<p>因为不使用交叉验证，也就没有从原训练集中分割出的验证集（validation set），那么此时我们可以用来验证数据的集合只有训练集（train set）和测试集（test set），</p>
+<ol>
+<li>如果使用训练集，数据都是模型见过的，用它来评估模型无法排除过拟合。这样，有些参数下模型可能评分很高，但却是由于过拟合，会误导我们对最佳参数的选择。</li>
+<li>如果使用测试集，也会有问题：训练集训练得到的模型<strong>可能</strong>并没有真正的泛化，只是刚好对于测试集过拟合。这样，我们选择最佳参数就面临风险。又因为测试集只有一个，我们也无从验证这个参数组合下的模型是不是真的对测试集过拟合。</li>
+</ol>
+<p>总之，都会面临过拟合的风险。</p>
+<p><strong>解决：</strong></p>
+<p>使用交叉验证，将训练数据再分出一个训练集和验证集（validation set）。这样，在网格搜索的每个参数组合下，模型会根据训练集进行训练，又在验证集（validation set）上验证表现。</p>
+<p>利用验证集对不同参数组合下的模型进行评估，我们可以阶段性的确定不同参数组合下的泛化能力，然后选择这一阶段泛化能力最好的参数，作为最优参数。</p>
+<p>最后，因为我们到目前为止也并没有使用过测试集（test set），我们还可以用测试集再评估一下最优参数下的模型的表现（这也就是步骤六编程练习5所做的事情）。</p>
 
 </div>
 </div>
@@ -13925,7 +13942,7 @@ RU5ErkJggg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="prompt input_prompt">In&nbsp;[54]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO 4</span>
@@ -13939,7 +13956,7 @@ RU5ErkJggg==
 <span class="k">def</span> <span class="nf">fit_model</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; 基于输入数据 [X,y]，利于网格搜索找到最优的决策树模型&quot;&quot;&quot;</span>
     
-    <span class="n">cross_validator</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">cross_validator</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
     
     <span class="n">regressor</span> <span class="o">=</span> <span class="n">DecisionTreeRegressor</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
@@ -14022,7 +14039,7 @@ RU5ErkJggg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="prompt input_prompt">In&nbsp;[55]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># 基于训练数据，获得最优模型</span>
@@ -14046,7 +14063,7 @@ RU5ErkJggg==
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Parameter &#39;max_depth&#39; is 4 for the optimal model.
+<pre>Parameter &#39;max_depth&#39; is 5 for the optimal model.
 </pre>
 </div>
 </div>
@@ -14059,8 +14076,8 @@ RU5ErkJggg==
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="&#38382;&#39064;-9---&#22238;&#31572;&#65306;">&#38382;&#39064; 9 - &#22238;&#31572;&#65306;<a class="anchor-link" href="#&#38382;&#39064;-9---&#22238;&#31572;&#65306;">&#182;</a></h3><p>最优模型的最大深度是 4，</p>
-<p>和我在问题 6 中的猜测一致</p>
+<h3 id="&#38382;&#39064;-9---&#22238;&#31572;&#65306;">&#38382;&#39064; 9 - &#22238;&#31572;&#65306;<a class="anchor-link" href="#&#38382;&#39064;-9---&#22238;&#31572;&#65306;">&#182;</a></h3><p>最优模型的最大深度是 5，</p>
+<p>和我在问题 6 中的猜测不一致</p>
 
 </div>
 </div>
@@ -14117,7 +14134,7 @@ RU5ErkJggg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="prompt input_prompt">In&nbsp;[56]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># 生成三个客户的数据</span>
@@ -14145,11 +14162,44 @@ RU5ErkJggg==
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Predicted selling price for Client 1&#39;s home: $344,884.62
-Predicted selling price for Client 2&#39;s home: $229,793.62
-Predicted selling price for Client 3&#39;s home: $892,850.00
+<pre>Predicted selling price for Client 1&#39;s home: $390,600.00
+Predicted selling price for Client 2&#39;s home: $192,281.25
+Predicted selling price for Client 3&#39;s home: $922,950.00
 </pre>
 </div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[71]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="p">(</span><span class="n">predicted_price</span> <span class="o">-</span> <span class="n">mean_price</span><span class="p">)</span> <span class="o">/</span> <span class="n">std_price</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[71]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([-0.38552581, -1.584984  ,  2.83419782])</pre>
+</div>
+
 </div>
 
 </div>
@@ -14162,22 +14212,51 @@ Predicted selling price for Client 3&#39;s home: $892,850.00
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="&#38382;&#39064;-10---&#22238;&#31572;&#65306;">&#38382;&#39064; 10 - &#22238;&#31572;&#65306;<a class="anchor-link" href="#&#38382;&#39064;-10---&#22238;&#31572;&#65306;">&#182;</a></h3><p>我会建议3位顾客的房屋售价：</p>
 <ol>
-<li>客户1 \$344,884.62</li>
-<li>客户2 \$229,793.62</li>
-<li>客户3 \$892,850.00</li>
+<li>客户1 \$390,600.00</li>
+<li>客户2 \$192,281.25</li>
+<li>客户3 \$922,950.00</li>
 </ol>
 <p>为了评价这些售价预测是否合理，我们将统计检验的 α 水平设为 0.05</p>
 <p>根据先前的计算，房价的平均值和标准方差分别是：$µ = \$454,342.94, σ = \$165,340.28 $，利用这两个统计量对3个售价进行归一化后，得到的值是：</p>
 <ol>
-<li>-0.66201854</li>
-<li>-1.35810421</li>
-<li>2.65214902</li>
+<li>-0.38552581</li>
+<li>-1.584984</li>
+<li>2.83419782</li>
 </ol>
-<p>因为 α 水平被设为 0.05，所以 z 临界值为 -1.96 和 1.96。用这两个临界值和上面归一化得到的 z 值相比，第三个房价的预测是不太可能的出现的。因此判断：</p>
+<p>因为 α 水平被设为 0.05，所以 z 临界值为 -1.96 和 1.96。用这两个临界值和上面归一化得到的 z 值相比，客户3的预测房价是不太可能的出现的。</p>
+<p>但比较一下这几个房屋的特点和其他房屋这几个特点的平均值：</p>
+<table>
+<thead><tr>
+<th></th>
+<th>平均值</th>
+<th>标准差</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>房间数</td>
+<td>6.240288</td>
+<td>0.643650</td>
+</tr>
+<tr>
+<td>低收入人群比例 %</td>
+<td>12.939632</td>
+<td>7.081990</td>
+</tr>
+<tr>
+<td>学生老师比例</td>
+<td>18.516564 ：1</td>
+<td>2.111268</td>
+</tr>
+</tbody>
+</table>
+<p>会发现</p>
 <ol>
-<li>客户1 和 客户2 的房价预测是合理的</li>
-<li>客户3 的房价预测不太合理</li>
+<li>客户3房间的3个指标也是明显好于平均标准的，所以可以认为客户3的房间价格明显高于其他房屋价格是合理的。</li>
+<li>客户1房间的3个指标的平均值较为接近，预测价格也接近平均水平，也可是认为预测价格是合理的。</li>
+<li>客户2房间的3项指标都明显比平均指标差，预测房价比平均值第很多，也可以认为是合理的。</li>
 </ol>
+<p>综上所述，可以任务模型预测的3个房价是合理的。</p>
 
 </div>
 </div>
@@ -14193,7 +14272,7 @@ Predicted selling price for Client 3&#39;s home: $892,850.00
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[45]:</div>
+<div class="prompt input_prompt">In&nbsp;[57]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1">#TODO 5</span>
@@ -14223,7 +14302,7 @@ Predicted selling price for Client 3&#39;s home: $892,850.00
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Optimal model has R^2 score 0.78 on test data
+<pre>Optimal model has R^2 score 0.76 on test data
 </pre>
 </div>
 </div>
@@ -14245,7 +14324,7 @@ Predicted selling price for Client 3&#39;s home: $892,850.00
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="&#38382;&#39064;11---&#22238;&#31572;">&#38382;&#39064;11 - &#22238;&#31572;<a class="anchor-link" href="#&#38382;&#39064;11---&#22238;&#31572;">&#182;</a></h3><p>$R^2$是0.78，这个评分和复杂度曲线中所显示的测试集评分是差不多的，说明模型在面对没有见过的数据时，保持了原有的表现。</p>
+<h3 id="&#38382;&#39064;11---&#22238;&#31572;">&#38382;&#39064;11 - &#22238;&#31572;<a class="anchor-link" href="#&#38382;&#39064;11---&#22238;&#31572;">&#182;</a></h3><p>$R^2$是0.76，这个评分和复杂度曲线中所显示的测试集评分是差不多的，说明模型在面对没有见过的数据时，保持了原有的表现。</p>
 
 </div>
 </div>
@@ -14263,7 +14342,7 @@ Predicted selling price for Client 3&#39;s home: $892,850.00
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[46]:</div>
+<div class="prompt input_prompt">In&nbsp;[58]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># 请先注释掉 fit_model 函数里的所有 print 语句</span>
@@ -14288,14 +14367,14 @@ Predicted selling price for Client 3&#39;s home: $892,850.00
 Trial 2: $411,417.39
 Trial 3: $415,800.00
 Trial 4: $420,622.22
-Trial 5: $413,334.78
-Trial 6: $383,896.15
-Trial 7: $390,250.00
+Trial 5: $418,377.27
+Trial 6: $411,931.58
+Trial 7: $399,663.16
 Trial 8: $407,232.00
-Trial 9: $408,758.82
+Trial 9: $402,531.82
 Trial 10: $413,700.00
 
-Range in prices: $36,726.07
+Range in prices: $29,438.89
 </pre>
 </div>
 </div>
@@ -14309,7 +14388,7 @@ Range in prices: $36,726.07
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="&#38382;&#39064;-12---&#22238;&#31572;&#65306;">&#38382;&#39064; 12 - &#22238;&#31572;&#65306;<a class="anchor-link" href="#&#38382;&#39064;-12---&#22238;&#31572;&#65306;">&#182;</a></h3><p>模型具有健壮性。</p>
-<p>又不同数据集训练得到的模型对统一客户的房价的预测值最大相差只有 36,726.07，这个差距是预测值最小值的9.5%，是预测值最大值的8.7%，是一个相对较小的值。</p>
+<p>又不同数据集训练得到的模型对统一客户的房价的预测值最大相差只有 29,438.89，这个差距是预测值最小值的7.5%，是预测值最大值的7.0%，是一个相对较小的值。</p>
 <p>所以说模型具有健壮性。</p>
 
 </div>
